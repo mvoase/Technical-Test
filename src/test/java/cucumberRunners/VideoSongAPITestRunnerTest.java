@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
                 "json:target/VideoSongAPITestRunnerTest.json"
         },
         monochrome = true,
-        tags = {"@VideoAPI"},
+        tags = {"@VideoGET"},
         features = "src/test/resources/features",
         glue = { "stepdefs"})
 @RunWith(Cucumber.class)
