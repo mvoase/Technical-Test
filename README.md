@@ -1,18 +1,20 @@
 -------------------------------------
-PRESS ASSOCIATION - QA TECHNICAL TASK
+Technical Test
 -------------------------------------
 
-Your task is to test and automate the API available at the url which you have been provided
+This Java project uses BDD test automation alongside Apache Fluent HC in order to interrogate an API. 
 
-Documentation describing the implementation and spec of this API is available here: [LINK TO PUBLICLY ACCESSIBLE STORE or PASTED DOCUMENTATION BELOW]
+The API carries a series of JSON data that includes details of Songs as and playlists. 
 
 
-----
-TASK
-----
+-------------------------------------
+Running these tests 
+-------------------------------------
 
-Using this Java project as a starting point, create a BDD style test suite using Cucumber/Gherkin syntax, utilising Apache fluent-hc to interrogate the API.
+When you clone this project you will find two runners under the cucumberRunners folder. 
+These will be called: 
 
-Your PASSING tests should FAIL if working functionality becomes broken.
+ - VideoPlayListAPITestRunnerTest
+ - VideoSongAPITestRunnerTest 
 
-Any FAILING tests should PASS if any broken functionality gets fixed.
+In order to be able to run each one you just need to add a JUnit runner to your project pointing to the correct runner.
