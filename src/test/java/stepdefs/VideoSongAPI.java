@@ -1,5 +1,6 @@
 package stepdefs;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -29,6 +30,7 @@ public class VideoSongAPI {
     private String newPlayListID;
     private String songResponse;
     private String addSongResponse;
+    private String deletePLResponse;
     private String idString;
     private String idString1;
     private String idString2;
@@ -151,7 +153,7 @@ public class VideoSongAPI {
         JsonElement element = parser.parse(songResponse).getAsJsonObject().get("_id");
         newSongID = element.toString();
         newSongID = newSongID.replace("\"", "");
-        System.out.println("Song ID = " + newSongID);
+        System.out.println("Song ID = " + newSongID + "was imported into the DB");
     }
 
     @Given("^I retrieve my playlist$")
@@ -265,7 +267,7 @@ public class VideoSongAPI {
         ResponseHandler < String > handler = new BasicResponseHandler();
         deleteResponse = handler.handleResponse(httpResponse);
         System.out.println(deleteResponse);
-        assertNull(null);
+        assertNull("Response =" + null);
     }
 
     @Given("^I add a song to a playlist$")
@@ -282,5 +284,18 @@ public class VideoSongAPI {
         addSongResponse = handler.handleResponse(httpResponse);
         System.out.println(addSongResponse);
 
+    }
+
+    @And("^I delete the playlist$")
+    public void DeletePlayList() throws Throwable {
+       //Delete the playlist based on the id
+        httpResponse = Request.Delete(playListURL + newPlayListID)
+                .connectTimeout(1000)
+                .socketTimeout(1000)
+                .execute()
+                .returnResponse();
+        ResponseHandler < String > handler = new BasicResponseHandler();
+        deletePLResponse = handler.handleResponse(httpResponse);
+        System.out.println(deletePLResponse);
     }
 }

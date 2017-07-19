@@ -29,8 +29,11 @@ The following runners will needed to be created as a Junit in order for these te
 
  - VideoPlayListPostSongAPITestRunnerTest
  This runner uses a post request to post in a song from the video list into an existing playlist
-@PlaylistUpdated
+@PlaylistUpdate
 
+ - VideoPlayListDeleteAPITestRunnerTest
+ This runner posts a new playlist into the DB, extracts the ID and then delete said Playlist.
+@PlaylistDelete
  - VideoSongAPITestRunnerTest
  This pulls through all the songs available using a GET request
  @VideoGET
@@ -43,11 +46,11 @@ The following runners will needed to be created as a Junit in order for these te
  This is the test runner for deleting the song you have just added from the API
  @VideoDelete
 
- -
-
 ------------------------------------
 Issues with the Test Pack
 ------------------------------------
+
+ - Need to implement a new method in order to handle removing songs from a playlist once this has been fixed with the API.
 
  - More tests needed to be added to query specific Artist, songs etc. For the purpose of this test I just wanted to try and hit every endpoint as possible,
   the other tests are something in which can be improved at a later date.
@@ -62,5 +65,7 @@ Known Issues with API
 Currently the following tests will fail:
 @VideoPost will fail on checking the response code
  - This is due to the response code expected return being 201 however the code returned is 200.
+
+
 
 These tests will fail until these issues are fixed within the API.

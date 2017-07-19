@@ -21,7 +21,6 @@ Feature: Song Video API Test
     Scenario:
       Given I Post a new Song into the API
       And I delete the video
-      Then I check the for the api for delete
 
   @PlaylistGet
   Scenario:
@@ -48,4 +47,8 @@ Feature: Song Video API Test
   #@PlayListSongRemove
 
 
-  #PlaylistDelete
+  @PlaylistDelete
+  Scenario: Add in a new playlist and then delete
+    Given I create a new playlist
+    And I delete the playlist
+    Then I check the for the api for delete
