@@ -29,7 +29,9 @@ public class VideoSongAPI {
     private String response;
     private String playlistResponse;
     private String playlistResponse1;
-    private String postResponse;
+    private String newPLResponse;
+    private String newPlayListID;
+    private String songResponse;
     private String idString;
     private String idString1;
     private String idString2;
@@ -147,8 +149,12 @@ public class VideoSongAPI {
                 .execute()
                 .returnResponse();
         ResponseHandler < String > handler = new BasicResponseHandler();
-        postResponse = handler.handleResponse(httpResponse);
-        System.out.println(postResponse);
+        songResponse = handler.handleResponse(httpResponse);
+        JsonParser parser = new JsonParser();
+        JsonElement element = parser.parse(songResponse).getAsJsonObject().get("_id");
+        newSongID = element.toString();
+        newSongID = newSongID.replace("\"", "");
+        System.out.println("Song ID = " + newSongID);
     }
 
     @Given("^I retrieve my playlist$")
@@ -192,7 +198,7 @@ public class VideoSongAPI {
         JsonElement playlist = playlistJson.get("_id");
         playListID = playlist.toString();
         playListID = playListID.replace("\"", "");
-        System.out.println("Playlist Title = " + playListID);
+        System.out.println("Playlist ID = " + playListID);
     }
 
     @Then("^I check the response code for the api$")
@@ -215,37 +221,44 @@ public class VideoSongAPI {
         System.out.println("Playlist has been parsed" + playlistResponse1);
     }
 
+    @Given("^I create a new playlist$")
+    public void CreatePlayList() throws Throwable {
+        String json = "{\n" +
+                "\t\"desc\": \"New Playlist\",\n" +
+                "\t\"title\": \"NewPlayList\"\n" +
+                "}";
+        httpResponse = Request.Post(playListURL)
+                .addHeader("content-type", "application/json")
+                .addHeader("Accept", "application/json")
+                .bodyString(json, ContentType.APPLICATION_JSON)
+                .execute()
+                .returnResponse();
+        ResponseHandler < String > handler = new BasicResponseHandler();
+        newPLResponse = handler.handleResponse(httpResponse);
+        JsonParser parser = new JsonParser();
+        JsonElement element = parser.parse(newPLResponse).getAsJsonObject().get("_id");
+        newPlayListID = element.toString();
+        newPlayListID = newPlayListID.replace("\"", "");
+        System.out.println("Playlist ID = " + newPlayListID);
+    }
 
  /*@Then("^I upload a new video to the playlist$")
  public void PostVideotoPlaylist() throws Throwable {
 
  }*/
 
-    @And("^I check the video is available in the Api$")
-    public void CheckVideoUpload() throws Throwable {
-        JsonParser parser = new JsonParser();
-        JsonElement element = parser.parse(postResponse);
-        JsonArray checkSong = element.getAsJsonArray();
-
-        //Gets the ID from postResponse
-        JsonObject songsJson = (JsonObject) checkSong.get(0);
-        JsonElement song = songsJson.get("_id");
-        newSongID = song.toString();
-        newSongID = newSongID.replace("\"", "");
-
-        System.out.println(newSongID);
-    }
-
     @And("^I check the response code for the api for post$")
     public void Check201Status() throws Throwable {
         int status = httpResponse.getStatusLine().getStatusCode();
         assertThat(status, equalTo(201));
+        System.out.println("Response code = " + status);
     }
 
     @And("^I check the for the api for delete$")
     public void Check204Status() throws Throwable {
        int status = httpResponse.getStatusLine().getStatusCode();
        assertThat(status, equalTo(204));
+       System.out.println("Response Code = " + status);
     }
 
     @Given("^I delete the video$")
@@ -260,5 +273,6 @@ public class VideoSongAPI {
         deleteResponse = handler.handleResponse(httpResponse);
         System.out.println(deleteResponse);
     }
+
 
 }

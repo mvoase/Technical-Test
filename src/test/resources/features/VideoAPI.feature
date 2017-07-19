@@ -22,7 +22,6 @@ Feature: Song Video API Test
       Given I delete the video
       And I check the for the api for delete
 
-
   @PlaylistGet
   Scenario:
     Given I retrieve my playlist
@@ -30,8 +29,11 @@ Feature: Song Video API Test
     And I retrieve information about a specific playlist
     Then I check the response code for the api
 
-  #@PlaylistPost
-
+  @PlaylistPost
+    Scenario:
+      Given I create a new playlist
+      Then I check the response code for the api for post
+      And I retrieve my playlist
 
   #PlaylistUpdate
 

@@ -33,8 +33,21 @@ The following runners will needed to be created as a Junit in order for these te
 
  - VideoSongDeleteAPITestRunnerTest
  This is the test runner for deleting the song you have just added from the API
- @VideoDelete
+ @VideoDelete (Current issues with this test - see Issues with Test Pack).
 
+------------------------------------
+Issues with the Test Pack
+------------------------------------
+
+ - Currently Video Delete doesn't run in conjuction to Video Post (so in theory doesn't retrieve the new Song ID that you have implemented.
+This is not something that is wrong with the API this is an issue with these tests and the delete function.
+These test will fail and need looking at.
+
+ - More tests needed to be added to query specific Artist, songs etc. For the purpose of this test I just wanted to try and hit every endpoint as possible,
+  the other tests are something in which can be improved at a later date.
+
+ - Posting in a new song currently uses raw JSON data from the code itself (obviously that means you will end up with duplicate entries of the same song within the DB, this needs changing so the pack pulls the data from a json file
+  picks a random song and adds it into the API, checks for an existing field and doesn't import if the song is already there.
 
 ------------------------------------
 Known Issues with API
@@ -43,8 +56,5 @@ Known Issues with API
 Currently the following tests will fail:
 @VideoPost will fail on checking the response code
  - This is due to the response code expected return being 201 however the code returned is 200.
-
-@VideoDelete will also fail due to the response code
- - This should return 204 code, but returns 200 also.
 
 These tests will fail until these issues are fixed within the API.
