@@ -1,17 +1,13 @@
 package stepdefs;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import gherkin.deps.com.google.gson.*;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 
 import java.io.IOException;
@@ -243,10 +239,6 @@ public class VideoSongAPI {
         System.out.println("Playlist ID = " + newPlayListID);
     }
 
-    /*@Then("^I upload a new video to the playlist$")
-       public void PostVideotoPlaylist() throws Throwable {
-
-      }*/
 
     @And("^I check the response code for the api for post$")
     public void Check201Status() throws Throwable {
@@ -257,14 +249,14 @@ public class VideoSongAPI {
 
     @And("^I check the for the api for delete$")
     public void Check204Status() throws Throwable {
-       int status = httpResponse.getStatusLine().getStatusCode();
-       assertThat(status, equalTo(204));
-       System.out.println("Response Code = " + status);
+        int status = httpResponse.getStatusLine().getStatusCode();
+        assertThat(status, equalTo(204));
+        System.out.println("Response Code = " + status);
     }
 
     @Given("^I delete the video$")
     public void DeleteVideo() throws Throwable {
-       //Delete the song you have just uploaded from the API
+        //Delete the song you have just uploaded from the API
         httpResponse = Request.Delete(SongURL + newSongID)
                 .connectTimeout(1000)
                 .socketTimeout(1000)
@@ -276,14 +268,13 @@ public class VideoSongAPI {
         assertNull(null);
     }
 
-
     @Given("^I add a song to a playlist$")
     public void AddSongtoPL() throws Throwable {
         //Add a song from the video api to playlist
         String json = "{ \"videos\": [ {\"" + idString + "\": \"add\"}, {\"" + idString2 + "\": \"add\"} ] }";
         httpResponse = Request.Patch(playListURL + playListID)
                 .addHeader("content-type", "application/json")
-                .addHeader("Accept",  "application/json")
+                .addHeader("Accept", "application/json")
                 .bodyString(json, ContentType.APPLICATION_JSON)
                 .execute()
                 .returnResponse();

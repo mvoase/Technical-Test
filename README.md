@@ -23,6 +23,14 @@ The following runners will needed to be created as a Junit in order for these te
  This runner uses a GET for all the playlists available
  @PlaylistGET
 
+ - VideoPlayListPostAPITestRunnerTest
+ This runner uses a post request to create a new playlist
+@PlaylistPost
+
+ - VideoPlayListPostSongAPITestRunnerTest
+ This runner uses a post request to post in a song from the video list into an existing playlist
+@PlaylistUpdated
+
  - VideoSongAPITestRunnerTest
  This pulls through all the songs available using a GET request
  @VideoGET
@@ -33,15 +41,13 @@ The following runners will needed to be created as a Junit in order for these te
 
  - VideoSongDeleteAPITestRunnerTest
  This is the test runner for deleting the song you have just added from the API
- @VideoDelete (Current issues with this test - see Issues with Test Pack).
+ @VideoDelete
+
+ -
 
 ------------------------------------
 Issues with the Test Pack
 ------------------------------------
-
- - Currently Video Delete doesn't run in conjuction to Video Post (so in theory doesn't retrieve the new Song ID that you have implemented.
-This is not something that is wrong with the API this is an issue with these tests and the delete function.
-These test will fail and need looking at.
 
  - More tests needed to be added to query specific Artist, songs etc. For the purpose of this test I just wanted to try and hit every endpoint as possible,
   the other tests are something in which can be improved at a later date.
