@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 /**
  * Created by mvoase on 17/07/2017.
@@ -32,6 +32,7 @@ public class VideoSongAPI {
     private String newPLResponse;
     private String newPlayListID;
     private String songResponse;
+    private String addSongResponse;
     private String idString;
     private String idString1;
     private String idString2;
@@ -242,10 +243,10 @@ public class VideoSongAPI {
         System.out.println("Playlist ID = " + newPlayListID);
     }
 
- /*@Then("^I upload a new video to the playlist$")
- public void PostVideotoPlaylist() throws Throwable {
+    /*@Then("^I upload a new video to the playlist$")
+       public void PostVideotoPlaylist() throws Throwable {
 
- }*/
+      }*/
 
     @And("^I check the response code for the api for post$")
     public void Check201Status() throws Throwable {
@@ -272,7 +273,23 @@ public class VideoSongAPI {
         ResponseHandler < String > handler = new BasicResponseHandler();
         deleteResponse = handler.handleResponse(httpResponse);
         System.out.println(deleteResponse);
+        assertNull(null);
     }
 
 
+    @Given("^I add a song to a playlist$")
+    public void AddSongtoPL() throws Throwable {
+        //Add a song from the video api to playlist
+        String json = "{ \"videos\": [ {\"" + idString + "\": \"add\"}, {\"" + idString2 + "\": \"add\"} ] }";
+        httpResponse = Request.Patch(playListURL + playListID)
+                .addHeader("content-type", "application/json")
+                .addHeader("Accept",  "application/json")
+                .bodyString(json, ContentType.APPLICATION_JSON)
+                .execute()
+                .returnResponse();
+        ResponseHandler < String > handler = new BasicResponseHandler();
+        addSongResponse = handler.handleResponse(httpResponse);
+        System.out.println(addSongResponse);
+
+    }
 }
