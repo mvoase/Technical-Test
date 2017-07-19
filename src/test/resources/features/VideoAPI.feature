@@ -6,7 +6,6 @@ Feature: Song Video API Test
     Then I check the response code for the api
     And I retrieve information about a song
     Then I check the response code for the api
-    #And I check the video is available in the Api
 
 
   @VideoPost
@@ -19,6 +18,8 @@ Feature: Song Video API Test
   #@VideoUpdate
 
 
+  #VideoDelete
+
 
   @PlaylistGet
   Scenario:
@@ -27,8 +28,9 @@ Feature: Song Video API Test
     And I retrieve information about a specific playlist
     Then I check the response code for the api
 
-
   #@PlaylistPost
 
 
+  #PlaylistUpdate
 
+  #PlaylistDelete

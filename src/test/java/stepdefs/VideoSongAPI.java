@@ -4,16 +4,17 @@ import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
-import gherkin.deps.com.google.gson.JsonArray;
-import gherkin.deps.com.google.gson.JsonElement;
-import gherkin.deps.com.google.gson.JsonObject;
-import gherkin.deps.com.google.gson.JsonParser;
+import gherkin.deps.com.google.gson.*;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.fluent.Request;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -28,6 +29,7 @@ public class VideoSongAPI {
     private String response;
     private String playlistResponse;
     private String playlistResponse1;
+    private String postResponse;
     private String idString;
     private String idString1;
     private String idString2;
@@ -124,8 +126,22 @@ public class VideoSongAPI {
     }
 
     @Given("^I Post a new Song into the API$")
-    public void PostVideo() throws Throwable {
-
+    public void PostVideo() throws IOException {
+        //Send in a new song into the API
+        String json = "{\n" +
+                "\t\"artist\": \"Ed Sheeran\",\n" +
+                "\t\"song\": \"Galway Girl\",\n" +
+                "\t\"publishDate\": \"2017-10-02\"\n" +
+                "}";
+        httpResponse = Request.Post(SongURL)
+                .addHeader("content-type", "application/json")
+                .addHeader("Accept", "application/json")
+                .bodyString(json, ContentType.APPLICATION_JSON)
+                .execute()
+                .returnResponse();
+        ResponseHandler <String>  handler = new BasicResponseHandler();
+        postResponse = handler.handleResponse(httpResponse);
+        System.out.println(postResponse);
     }
 
     @Given("^I retrieve my playlist$")
@@ -174,7 +190,9 @@ public class VideoSongAPI {
 
     @Then("^I check the response code for the api$")
     public void CheckAPIResponse() throws Throwable {
-        assertThat(httpResponse.getStatusLine().getStatusCode(), equalTo(200));
+        int status = httpResponse.getStatusLine().getStatusCode();
+        System.out.println(status);
+        assertThat(status, equalTo(200));
     }
 
     @And("^I retrieve information about a specific playlist$")
@@ -198,6 +216,9 @@ public class VideoSongAPI {
 
     @And("^I check the video is available in the Api$")
     public void CheckVideoUpload() throws Throwable {
+        JsonParser parser = new JsonParser();
+        JsonElement element = parser.parse(postResponse);
+        JsonArray checkSong = element.getAsJsonArray();
 
     }
 
