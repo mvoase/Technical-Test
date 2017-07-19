@@ -10,14 +10,14 @@ import org.junit.runner.RunWith;
 
 @CucumberOptions(
         plugin = {"pretty",
-                "html:target/cucumber/VideoSongAPITestRunnerTest-html-report",
-                "json:target/VideoSongAPITestRunnerTest.json"
+                "html:target/cucumber/VideoSongDeleteAPITestRunnerTest-html-report",
+                "json:target/VideoSongDeleteAPITestRunnerTest.json"
         },
         monochrome = true,
-        tags = {"@VideoGET"},
+        tags = {"@VideoDelete"},
         features = "src/test/resources/features",
         glue = { "stepdefs"})
 @RunWith(Cucumber.class)
-public class VideoSongAPITestRunnerTest {
+public class VideoSongDeleteAPITestRunnerTest {
 
 }

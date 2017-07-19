@@ -37,6 +37,8 @@ public class VideoSongAPI {
     private String idString4;
     private String playTitle;
     private String playListID;
+    private String newSongID;
+    private String deleteResponse;
     private String randomSong;
     private String playListURL = "http://turing.niallbunting.com:3003/api/playlist/";
     private HttpResponse httpResponse;
@@ -49,7 +51,7 @@ public class VideoSongAPI {
                 .socketTimeout(1000)
                 .execute()
                 .returnResponse();
-        ResponseHandler<String> handler = new BasicResponseHandler();
+        ResponseHandler < String > handler = new BasicResponseHandler();
         response = handler.handleResponse(httpResponse);
         convertString();
     }
@@ -101,7 +103,13 @@ public class VideoSongAPI {
 
     private String getRandomSongID() throws Throwable {
         // Picks a random song to use from the api
-        String[] randomSongArray = {idString, idString1, idString2, idString3, idString4};
+        String[] randomSongArray = {
+                idString,
+                idString1,
+                idString2,
+                idString3,
+                idString4
+        };
         Random rnd = new Random();
 
         //Picks the random Song
@@ -114,13 +122,12 @@ public class VideoSongAPI {
     public void SongGetCall() throws Throwable {
         getRandomSongID();
         //Send in the request for the first song
-        // Send in get request to retrieve all the songs in the API
         httpResponse = Request.Get(SongURL + randomSong)
                 .connectTimeout(1000)
                 .socketTimeout(1000)
                 .execute()
                 .returnResponse();
-        ResponseHandler<String> handler = new BasicResponseHandler();
+        ResponseHandler < String > handler = new BasicResponseHandler();
         String songResponse = handler.handleResponse(httpResponse);
         System.out.println(songResponse);
     }
@@ -139,7 +146,7 @@ public class VideoSongAPI {
                 .bodyString(json, ContentType.APPLICATION_JSON)
                 .execute()
                 .returnResponse();
-        ResponseHandler <String>  handler = new BasicResponseHandler();
+        ResponseHandler < String > handler = new BasicResponseHandler();
         postResponse = handler.handleResponse(httpResponse);
         System.out.println(postResponse);
     }
@@ -152,7 +159,7 @@ public class VideoSongAPI {
                 .socketTimeout(1000)
                 .execute()
                 .returnResponse();
-        ResponseHandler<String> handler = new BasicResponseHandler();
+        ResponseHandler < String > handler = new BasicResponseHandler();
         playlistResponse = handler.handleResponse(httpResponse);
         getPlayListID();
         getPlaylistTitle();
@@ -203,16 +210,16 @@ public class VideoSongAPI {
                 .socketTimeout(1000)
                 .execute()
                 .returnResponse();
-        ResponseHandler<String> handler = new BasicResponseHandler();
+        ResponseHandler < String > handler = new BasicResponseHandler();
         playlistResponse1 = handler.handleResponse(httpResponse);
         System.out.println("Playlist has been parsed" + playlistResponse1);
     }
 
 
-    /*@Then("^I upload a new video to the playlist$")
-    public void PostVideo() throws Throwable {
+ /*@Then("^I upload a new video to the playlist$")
+ public void PostVideotoPlaylist() throws Throwable {
 
-    }*/
+ }*/
 
     @And("^I check the video is available in the Api$")
     public void CheckVideoUpload() throws Throwable {
@@ -220,7 +227,38 @@ public class VideoSongAPI {
         JsonElement element = parser.parse(postResponse);
         JsonArray checkSong = element.getAsJsonArray();
 
+        //Gets the ID from postResponse
+        JsonObject songsJson = (JsonObject) checkSong.get(0);
+        JsonElement song = songsJson.get("_id");
+        newSongID = song.toString();
+        newSongID = newSongID.replace("\"", "");
+
+        System.out.println(newSongID);
     }
 
+    @And("^I check the response code for the api for post$")
+    public void Check201Status() throws Throwable {
+        int status = httpResponse.getStatusLine().getStatusCode();
+        assertThat(status, equalTo(201));
+    }
+
+    @And("^I check the for the api for delete$")
+    public void Check204Status() throws Throwable {
+       int status = httpResponse.getStatusLine().getStatusCode();
+       assertThat(status, equalTo(204));
+    }
+
+    @Given("^I delete the video$")
+    public void DeleteVideo() throws Throwable {
+       //Delete the song you have just uploaded from the API
+        httpResponse = Request.Delete(SongURL + newSongID)
+                .connectTimeout(1000)
+                .socketTimeout(1000)
+                .execute()
+                .returnResponse();
+        ResponseHandler < String > handler = new BasicResponseHandler();
+        deleteResponse = handler.handleResponse(httpResponse);
+        System.out.println(deleteResponse);
+    }
 
 }

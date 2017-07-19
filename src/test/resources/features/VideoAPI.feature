@@ -1,3 +1,4 @@
+@VideoAPI
 Feature: Song Video API Test
 
   @VideoGET
@@ -11,14 +12,15 @@ Feature: Song Video API Test
   @VideoPost
   Scenario:
     Given I Post a new Song into the API
-    Then I check the response code for the api
-    And I check the video is available in the Api
-
+    And I check the response code for the api for post
 
   #@VideoUpdate
 
 
-  #VideoDelete
+  @VideoDelete
+    Scenario:
+      Given I delete the video
+      And I check the for the api for delete
 
 
   @PlaylistGet
